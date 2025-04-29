@@ -1,92 +1,109 @@
-# EX 1 Display operator precedence in the infix expression.
-## DATE: 
+# Ex2 Conversion of the infix expression into postfix expression
+## DATE:
 ## AIM:
-To write a C program to find and display the priority of the operator in the given Postfix expression
-"(A*B)^C+(D%H)/F&G".
+To write a C program to convert the infix expression into postfix form using stack by following the operator precedence and associative rule.
 
 ## Algorithm
-1. Start the program. 
-2. Define the priority() function to return the priority of operators. 
-3. Initialize the string containing operators and operands. 
-4. Loop through each character in the string. 
-5. For each operator, call the priority() function to determine its priority. 
-6. Print the operator and its corresponding priority level. 
-7. End. 
+1. Start the program.
+2. Initialize a stack and set the top index to -1. 
+3. Define the push() and pop() functions to add and remove elements from the stack. 
+4. Define the priority() function to assign priorities to operators. 
+5. Traverse the expression in the IntoPost() function, handling operands, parentheses, and 
+operators. 
+6. After processing the expression, pop and print any remaining operators from the stack. 
+7. End.  
 
 ## Program:
 ```
-/*
-Program to find and display the priority of the operator in the given Postfix expression
+Program to convert the infix expression into postfix expression
+
 Developed by: BALACHANDRAN S
 RegisterNumber:  212222100008
-*/
 ```
 ```
-#include <stdio.h> 
-#include<string.h> 
+#include<stdio.h> 
+#include<ctype.h> 
+ 
+char stack[100]; 
+int top = -1; 
+void push(char x) 
+{ 
+stack[++top]=x; 
+}  
+char pop() 
+{ 
+if(top==-1) 
+return 0; 
+else 
+return stack[top--]; 
+} 
 int priority(char x) 
 { 
- 
-if(x == '&' || x == '|') 
-return 1; 
-if(x == '+' || x == '-') 
-return 2; 
-if(x == '*' || x == '/' || x == '%') 
-return 3; 
-if(x == '^') 
-return 4; 
+if(x=='(')
+{ 
 return 0; 
 } 
- 
+if(x=='&'||x=='|') 
+{ 
+return 1; 
+} 
+if(x=='+'||x=='-') 
+{ 
+return 2; 
+} 
+if(x=='*'||x=='/'||x=='%') 
+{ 
+return 3; 
+} 
+if(x=='^') 
+{ 
+return 4; 
+} 
+return 0; 
+} 
+char IntoPost(char *exp) 
+{ 
+char *e,x; 
+e=exp; 
+while(*e!='\0') 
+{ 
+if(isalnum(*e)) 
+{ 
+printf("%c ",*e); 
+} 
+else if(*e=='(') 
+{ 
+push(*e); 
+} 
+else if(*e==')') 
+{ 
+while((x=pop())!='(') 
+printf("%c ",x); 
+} 
+else 
+{ 
+while(priority(stack[top])>=priority(*e)) 
+printf("%c ",pop()); 
+push(*e); 
+} 
+e++; 
+} 
+while(top != -1) 
+{ 
+printf("%c ",pop()); 
+}return 0; 
+} 
 int main() 
 { 
-int i,j; 
-  
-  
-char ch[100]="(A*B)^C+(D%H)/F&G"; 
-for(i=0;i<strlen(ch);i++) 
-{ 
-if(ch[i]=='+'|| 
-ch[i]=='-'|| 
-ch[i]=='*'|| 
-ch[i]=='/'|| 
-ch[i]=='%'|| 
-ch[i]=='^'|| 
-ch[i]=='&'|| 
-ch[i]=='|') 
-{ 
-j=priority(ch[i]); 
-switch(j) 
-{ 
-case 1: 
-printf("%c ---- > ",ch[i]); 
-printf("Lowest Priority\n"); 
-break; 
-case 2: 
-printf("%c ---- > ",ch[i]); 
-printf("Second Lowest Priority\n"); 
-break; 
-case 3: 
-printf("%c ---- > ",ch[i]); 
-printf("Second Highest Priority\n"); 
-break; 
-case 4: 
-printf("%c ---- > ",ch[i]); 
-printf("Highest Priority\n"); 
-break; 
-} 
-} 
-} 
- 
-return 0; 
+char exp[100]="3%2+4*(A&B)"; 
+IntoPost(exp); 
+return 1; 
 } 
 
 ```
-
 ## Output:
 
-![image](https://github.com/user-attachments/assets/f6243a76-acd1-40c8-abdb-7ca49aa415b5)
-
+![image](https://github.com/user-attachments/assets/2257fdba-addf-4cdc-b5ad-ddcc31aea8fb)
 
 ## Result:
-Thus the C program to find and display the priority of the operator in the given Postfix expression is implemented successfully
+Thus, the C program to convert the infix expression into postfix form using stack by following the operator precedence and associative rule is implemented successfully.
